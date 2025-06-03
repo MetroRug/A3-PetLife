@@ -75,6 +75,8 @@ function atualizarContadorCarrinho() {
     }
 }
 
+atualizarContadorCarrinho();
+
 // Função para carregar e exibir os itens do carrinho na página carrinho
 document.addEventListener('DOMContentLoaded', () => {
     carregarCarrinho();
@@ -140,6 +142,7 @@ function carregarCarrinho() {
         btn.addEventListener('click', (e) => {
             const index = parseInt(e.target.getAttribute('data-index'));
             removerItemDoCarrinho(index);
+            atualizarContadorCarrinho();
         });
     });
 
@@ -281,21 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarCarrinho();
     }
     
-    // Adiciona o ícone do carrinho no header
-    const nav = document.querySelector('nav ul');
-    if (nav) {
-        const carrinhoItem = document.createElement('li');
-        carrinhoItem.innerHTML = `
-            <a href="../carrinho.html" id="carrinho-link">
-                Carrinho
-                <span id="contador-carrinho" style="display: none;"></span>
-            </a>
-        `;
-        nav.appendChild(carrinhoItem);
-        
-        // Atualiza o contador novamente para garantir que o elemento existe
-        atualizarContadorCarrinho();
-    }
 });
 
 // Dados dos produtos (simulando um banco de dados)
