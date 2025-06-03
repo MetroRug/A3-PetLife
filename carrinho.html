@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carrinho - PetShop PetLife</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>PetShop PetLife</h1>
+            <p>O melhor cuidado para o seu pet</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="servicos.html">Serviços</a></li>
+                <li><a href="contato.html">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="carrinho">
+            <h2>Itens no seu carrinho</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Preço Unitário</th>
+                        <th>Total</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="lista-carrinho">
+                    <!-- Linhas dos produtos serão inseridas aqui pelo JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="resumo-carrinho">
+                <p><strong>Total:</strong> R$ <span id="valor-total">0,00</span></p>
+                <button id="finalizar-compra">Finalizar Compra</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 PetShop PetLife. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

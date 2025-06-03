@@ -75,6 +75,104 @@ function atualizarContadorCarrinho() {
     }
 }
 
+// Função para carregar e exibir os itens do carrinho na página carrinho
+document.addEventListener('DOMContentLoaded', () => {
+    carregarCarrinho();
+
+    const btnFinalizar = document.getElementById('finalizar-compra');
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener('click', () => {
+            alert('Compra finalizada! Obrigada pela preferência.');
+            localStorage.removeItem('carrinho');
+            carregarCarrinho();
+        });
+    }
+});
+
+function carregarCarrinho() {
+    const carrinhoContainer = document.querySelector('.lista-carrinho');
+    const valorTotalElem = document.getElementById('valor-total');
+
+    if (!carrinhoContainer || !valorTotalElem) return;
+
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+    carrinhoContainer.innerHTML = ''; // Limpa o conteúdo
+
+    if (carrinho.length === 0) {
+        carrinhoContainer.innerHTML = `
+            <tr>
+                <td colspan="5">Seu carrinho está vazio.</td>
+            </tr>
+        `;
+        valorTotalElem.textContent = '0,00';
+        return;
+    }
+
+    let total = 0;
+
+    carrinho.forEach((item, index) => {
+        const totalItem = item.preco * item.quantidade;
+        total += totalItem;
+
+        const linha = document.createElement('tr');
+        linha.innerHTML = `
+            <td>
+                <img src="${item.imagem}" alt="${item.nome}" style="width:200px; height:160px; vertical-align:middle; margin-right:10px;">
+                ${item.nome}
+            </td>
+            <td>
+                <input type="number" min="1" value="${item.quantidade}" data-index="${index}" class="quantidade-input" style="width: 60px; text-align: center;">
+            </td>
+            <td>R$ ${item.preco.toFixed(2)}</td>
+            <td>R$ ${totalItem.toFixed(2)}</td>
+            <td>
+                <button class="remover-item" data-index="${index}">Remover</button>
+            </td>
+        `;
+        carrinhoContainer.appendChild(linha);
+    });
+
+    valorTotalElem.textContent = total.toFixed(2);
+
+    // Evento para remover item
+    document.querySelectorAll('.remover-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            removerItemDoCarrinho(index);
+        });
+    });
+
+    // Evento para atualizar quantidade
+    document.querySelectorAll('.quantidade-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            let novaQuantidade = parseInt(e.target.value);
+
+            if (isNaN(novaQuantidade) || novaQuantidade < 1) {
+                novaQuantidade = 1;
+                e.target.value = 1;
+            }
+
+            atualizarQuantidade(index, novaQuantidade);
+        });
+    });
+}
+
+function atualizarQuantidade(index, novaQuantidade) {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    carrinho[index].quantidade = novaQuantidade;
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    carregarCarrinho(); // Recarrega o carrinho com os valores atualizados
+}
+
+function removerItemDoCarrinho(index) {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    carrinho.splice(index, 1); // Remove o item pelo índice
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    carregarCarrinho();
+}
+
 // Função para lidar com o envio do formulário de contato
 function configurarFormularioContato() {
     const formContato = document.querySelector('.contato-form');
@@ -178,24 +276,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (path === 'index.html' || path === '') {
         inicializarCarrossel();
     }
+
+    if (path === 'carrinho.html') {
+    carregarCarrinho();
+    }
     
     // Adiciona o ícone do carrinho no header
     const nav = document.querySelector('nav ul');
     if (nav) {
         const carrinhoItem = document.createElement('li');
         carrinhoItem.innerHTML = `
-            <a href="#" id="carrinho-link">
+            <a href="../carrinho.html" id="carrinho-link">
                 Carrinho
                 <span id="contador-carrinho" style="display: none;"></span>
             </a>
         `;
         nav.appendChild(carrinhoItem);
-        
-        // Configura o clique no carrinho
-        document.getElementById('carrinho-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Em uma aplicação real, isso abriria um modal ou página do carrinho com os itens selecionados.');
-        });
         
         // Atualiza o contador novamente para garantir que o elemento existe
         atualizarContadorCarrinho();
@@ -209,7 +305,7 @@ const produtos = [
         nome: "Ração Premium para Cães",
         preco: 89.90,
         categoria: "racao",
-        imagem: "https://via.placeholder.com/150",
+        imagem: "Imagens/produtos/racao-cachorro.png",
         descricao: "Ração super premium para cães adultos de todas as raças."
     },
     {
@@ -217,7 +313,7 @@ const produtos = [
         nome: "Brinquedo Osso de Borracha",
         preco: 24.90,
         categoria: "brinquedo",
-        imagem: "https://via.placeholder.com/150",
+        imagem: "Imagens/produtos/osso-borracha.png",
         descricao: "Brinquedo resistente para cães de todos os portes."
     },
     {
@@ -225,7 +321,7 @@ const produtos = [
         nome: "Coleira Antipulgas",
         preco: 39.90,
         categoria: "acessorio",
-        imagem: "https://via.placeholder.com/150",
+        imagem: "Imagens/produtos/coleira-antipulgas.png",
         descricao: "Coleira que protege seu cão contra pulgas e carrapatos."
     },
     {
@@ -233,7 +329,7 @@ const produtos = [
         nome: "Ração para Gatos Castrados",
         preco: 79.90,
         categoria: "racao",
-        imagem: "https://via.placeholder.com/150",
+        imagem: "Imagens/produtos/racao-gato.png",
         descricao: "Ração especial para gatos castrados."
     },
     {
@@ -241,7 +337,7 @@ const produtos = [
         nome: "Arranhador para Gatos",
         preco: 129.90,
         categoria: "brinquedo",
-        imagem: "https://via.placeholder.com/150",
+        imagem: "Imagens/produtos/arranhador.png",
         descricao: "Arranhador com plataformas e brinquedos pendurados."
     },
     {
@@ -249,7 +345,7 @@ const produtos = [
         nome: "Guia Retrátil",
         preco: 59.90,
         categoria: "acessorio",
-        imagem: "https://via.placeholder.com/150",
+        imagem: "Imagens/produtos/guia-retratil.png",
         descricao: "Guia retrátil de 5 metros para passeios com segurança."
     }
 ];
