@@ -120,11 +120,11 @@ function carregarCarrinho() {
         const linha = document.createElement('tr');
         linha.innerHTML = `
             <td>
-                <img src="${item.imagem}" alt="${item.nome}" style="width:200px; height:160px; vertical-align:middle; margin-right:10px;">
+                <img src="${item.imagem}" alt="${item.nome}" style="width:160px; height:160px; vertical-align:middle; margin-right:10px;">
                 ${item.nome}
             </td>
             <td>
-                <input type="number" min="1" value="${item.quantidade}" data-index="${index}" class="quantidade-input" style="width: 60px; text-align: center;">
+                <input type="number" min="1" value="${item.quantidade}" data-index="${index}" class="quantidade-input">
             </td>
             <td>R$ ${item.preco.toFixed(2)}</td>
             <td>R$ ${totalItem.toFixed(2)}</td>
